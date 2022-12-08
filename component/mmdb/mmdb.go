@@ -50,7 +50,7 @@ func Verify() bool {
 	return err == nil
 }
 
-func Instance() Reader {
+func DefaultInstance() Reader {
 	once.Do(func() {
 		mmdb, err := maxminddb.Open(C.Path.MMDB())
 		if err != nil {
