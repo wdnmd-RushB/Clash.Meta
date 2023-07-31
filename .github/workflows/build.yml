@@ -119,21 +119,6 @@ jobs:
           CC=${ANDROID_NDK_HOME}/toolchains/llvm/prebuilt/linux-x86_64/bin/armv7a-linux-androideabi33-clang
           CGO_ENABLED=1 CC=${CC} GOARCH=arm GOOS=android go build -tags ${TAGS} -trimpath -ldflags "${LDFLAGS}" -o bin/${NAME}-android-arm
 
-
-      - name: Set up xgo
-        if: ${{ matrix.job.type=='WithCGO' && (matrix.job.target != 'android' || matrix.job.target !='android-arm' )}}
-        run: |
-          docker pull techknowlogick/xgo:latest
-          go install src.techknowlogick.com/xgo@latest
-
-      - name: Build by xgo
-        if: ${{ matrix.job.type=='WithCGO' && (matrix.job.target != 'android' || matrix.job.target !='android-arm' )}}
-        env:
-          ANDROID_NDK_HOME: ${{ steps.setup-ndk.outputs.ndk-path }}
-        run: |
-          mkdir bin
-          xgo --targets="${{ matrix.job.target }}" --tags="${TAGS}" -ldflags="${LDFLAGS}" --out bin/${NAME} ./
-
       - name: Rename
         if: ${{ matrix.job.type=='WithCGO' }}
         run: |
